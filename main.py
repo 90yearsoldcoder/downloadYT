@@ -26,7 +26,7 @@ def completed(stream, file_path):
         print('-' * 60)
 
 
-def download(url: str, path: str, cap_flag: bool):
+def download(url: str, path: str):
     try:
         yt = YouTube(url, on_progress_callback=on_progress, on_complete_callback=completed)
         stream = yt.streams.filter(progressive=True, file_extension='mp4').get_highest_resolution()
@@ -37,9 +37,36 @@ def download(url: str, path: str, cap_flag: bool):
     except:
         print('Something went wrong in function download')
 
+def download_cap(url: str, path: str, lan_code: str):
+    typewrite(0.01, 0.05, f"Start to download the Caption of {lan_code}...\n")
+    yt = YouTube(url)
+    try:
+        caption_en = yt.captions[lan_code]
+        caption_en.xml_captions
+        #print(caption_en.generate_srt_captions())
+        caption_en.download(title=yt.title + "_" + lan_code, output_path=path)
+    except:
+        typewrite(0.01, 0.05, "Not available \n")
+        typewrite(0.01, 0.05, "Trying to download auto-generating caption \n")
+        try:
+            caption_en = yt.captions['a.'+lan_code]
+            caption_en.xml_captions
+            #print(caption_en.generate_srt_captions())
+            caption_en.download(title=yt.title + "_" + lan_code, output_path=path)
+        except:
+            typewrite(0.01, 0.05, "The auto-generating caption is Not available \n")
 
 
 if __name__ == '__main__':
     url = input("The URL to the Youtube Video: ")
     path = 'videos'
-    download(url, path)
+
+    # down load video
+    #download(url, path)
+
+    # download English Caption
+    cap = input("Do you need the caption file(en)? y/n")
+    if cap == 'y' or cap == 'Y':
+        download_cap(url, path, 'en')
+
+
