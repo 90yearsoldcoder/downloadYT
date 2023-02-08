@@ -1,5 +1,4 @@
 # This is a mini program to download Youtube Video
-import pytube.request
 from pytube import YouTube
 from pytube.cli import on_progress
 import time
@@ -42,7 +41,6 @@ def download_cap(url: str, path: str, lan_code: str):
     yt = YouTube(url)
     try:
         caption_en = yt.captions[lan_code]
-        caption_en.xml_captions
         #print(caption_en.generate_srt_captions())
         caption_en.download(title=yt.title + "_" + lan_code, output_path=path)
     except:
@@ -50,7 +48,6 @@ def download_cap(url: str, path: str, lan_code: str):
         typewrite(0.01, 0.05, "Trying to download auto-generating caption \n")
         try:
             caption_en = yt.captions['a.'+lan_code]
-            caption_en.xml_captions
             #print(caption_en.generate_srt_captions())
             caption_en.download(title=yt.title + "_" + lan_code, output_path=path)
         except:
@@ -61,12 +58,14 @@ if __name__ == '__main__':
     url = input("The URL to the Youtube Video: ")
     path = 'videos'
 
-    # down load video
-    #download(url, path)
+    # download video
+    download(url, path)
 
     # download English Caption
     cap = input("Do you need the caption file(en)? y/n")
     if cap == 'y' or cap == 'Y':
         download_cap(url, path, 'en')
+
+
 
 
