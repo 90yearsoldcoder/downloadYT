@@ -39,5 +39,5 @@ def download(url: str, path: str):
 
 if __name__ == '__main__':
     url = input("The URL to the Youtube Video: ")
-    path = '.'
+    path = 'videos'
     download(url, path)
